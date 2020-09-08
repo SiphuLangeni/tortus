@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://github.com/SiphuLangeni/tortus/blob/master/Images/tortus625.png" alt="tortus logo">
+    <img src="Images/tortus625.png" alt="tortus logo">
 </p>
 
 

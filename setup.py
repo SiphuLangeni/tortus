@@ -8,7 +8,7 @@ setup(
     version='0.0.1',
     description='Annotate text for classification in a Jupyter Notebook',
     url='https://github.com/SiphuLangeni/tortus',
-    author='Siphu Langeni,
+    author='Siphu Langeni',
     author_email='szlangeni@gmail.com',
     py_modules=['tortus'],
     package_dir={'': 'src'},

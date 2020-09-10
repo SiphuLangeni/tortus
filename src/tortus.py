@@ -14,7 +14,7 @@ class Tortus:
         self.id_column = id_column
         self.text = text
         if annotation_df is None:
-            self.annotations = pd.DataFrame(columns=['id', 'text','label','annotated_at'])
+            self.annotations = pd.DataFrame(columns=[id_column, text,'label','annotated_at'])
         else:
             self.annotations = annotation_df.copy()
         self.num_records = num_records
@@ -29,7 +29,7 @@ class Tortus:
             subset_df = self.df.copy()
 
         else:
-            leave_out = self.annotations['text'].to_list()
+            leave_out = self.annotations[self.text].to_list()
             subset_df = self.df[~self.df[self.text].isin(leave_out)]
 
         if self.random:

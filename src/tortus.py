@@ -65,11 +65,18 @@ class Tortus:
                 bar_style='',
                 orientation='horizontal')
         
+        logo_layout = widgets.Layout(
+                display='flex',
+                flex_flow='column',
+                align_items='center',
+                width='100%')
+        logo_box = widgets.HBox(children=[logo],layout=logo_layout)
+        
         sentiment_buttons = widgets.HBox([positive_button, negative_button, neutral_button, skip_button])
         confirmation_buttons = widgets.HBox([confirm_button, redo_button, quit_button])
         output = widgets.Output()
 
-        display(logo, instructions, text, sentiment_buttons, widgets.HBox([confirmation_buttons, progress_bar]), output)
+        display(logo_box, instructions, text, sentiment_buttons, widgets.HBox([confirmation_buttons, progress_bar]), output)
         confirmation_buttons.layout.visibility = 'hidden'    
 
 

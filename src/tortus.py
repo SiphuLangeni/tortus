@@ -47,7 +47,10 @@ class Tortus:
         with open('Images/tortus250.png', 'rb') as image_file:
             image = image_file.read()
         logo = widgets.Image(value=image, format='png')
-        instructions = widgets.HTML("<b>Click on the appropriate sentiment for the text below:</b>")
+        instructions = widgets.HTML(
+            '<b>Click on the appropriate sentiment for the text below. Each selection requires \
+                confirmation before proceeding to the next item. To retrieve your annotations \
+                at any time, call <i>your_instance.annotations</i></b>.')
         text = HTML(self.subset_df.iloc[self.annotation_index, 1])
         positive_button = widgets.Button(description='Positive')
         negative_button = widgets.Button(description='Negative')

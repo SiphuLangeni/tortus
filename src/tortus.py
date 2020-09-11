@@ -44,7 +44,9 @@ class Tortus:
         '''
         Displays texts to be annotated and loads user inputted labels and timestamp to dataframe.
         '''
-        
+        with open('Images/tortus250.png', 'rb') as image_file:
+            image = image_file.read()
+        logo = widgets.Image(value=image, format='png')
         instructions = widgets.HTML("<b>Click on the appropriate sentiment for the text below:</b>")
         text = HTML(self.subset_df.iloc[self.annotation_index, 1])
         positive_button = widgets.Button(description='Positive')
@@ -67,7 +69,7 @@ class Tortus:
         confirmation_buttons = widgets.HBox([confirm_button, redo_button, quit_button])
         output = widgets.Output()
 
-        display(instructions, text, sentiment_buttons, widgets.HBox([confirmation_buttons, progress_bar]), output)
+        display(logo, instructions, text, sentiment_buttons, widgets.HBox([confirmation_buttons, progress_bar]), output)
         confirmation_buttons.layout.visibility = 'hidden'    
 
 

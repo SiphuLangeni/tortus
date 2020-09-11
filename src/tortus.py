@@ -73,13 +73,13 @@ class Tortus:
                 flex_flow='column',
                 align_items='center',
                 width='100%')
-        logo_box = widgets.HBox(children=[logo],layout=logo_layout)
         
-        sentiment_buttons = widgets.HBox([positive_button, negative_button, neutral_button, skip_button])
-        confirmation_buttons = widgets.HBox([confirm_button, redo_button, quit_button])
+        logo_box = widgets.HBox(children=[logo],layout=logo_layout)
+        sentiment_buttons = widgets.HBox([positive_button, negative_button, neutral_button, skip_button, quit_button])
+        confirmation_buttons = widgets.HBox([confirm_button, redo_button])
         output = widgets.Output()
 
-        display(logo_box, instructions, text, sentiment_buttons, widgets.HBox([confirmation_buttons, progress_bar]), output)
+        display(logo_box, instructions, text, sentiment_buttons, confirmation_buttons, progress_bar, output)
         confirmation_buttons.layout.visibility = 'hidden'    
 
 
@@ -153,11 +153,11 @@ class Tortus:
         def quit_button_clicked(button):
             clear_output(True)
             progress_bar = widgets.IntProgress(
-                value=self.annotation_index + 1,
+                value=self.annotation_index,
                 min=0,
                 max=self.num_records,
                 step=1,
-                description=f'{self.annotation_index + 1}/{self.num_records}',
+                description=f'{self.annotation_index}/{self.num_records}',
                 bar_style='',
                 orientation='horizontal')
             display(HTML('<h3>Annotations stopped.</h3>'))

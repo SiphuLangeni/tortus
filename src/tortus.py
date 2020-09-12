@@ -40,7 +40,7 @@ class Tortus:
         return subset_df
         
         
-    def load_annotations(self):
+    def annotate(self):
         '''
         Displays texts to be annotated and loads user inputted labels and timestamp to dataframe.
         '''
@@ -121,7 +121,7 @@ class Tortus:
             if self.annotation_index < len(self.subset_df) - 1:
                 self.annotation_index += 1
                 clear_output(True)
-                self.load_annotations()
+                self.annotate()
             else:
 
                 clear_output(True)
@@ -164,6 +164,3 @@ class Tortus:
             display (progress_bar)
             
         quit_button.on_click(quit_button_clicked)
-
-    def annotate(self):
-        self.load_annotations()

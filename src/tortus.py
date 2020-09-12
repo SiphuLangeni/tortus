@@ -5,22 +5,51 @@ from ipywidgets import HTML, Output
 from IPython.display import display, clear_output
 
 class Tortus:
+    '''Text annotation within a Jupyter Notebook
+    
+    :attr annotation_index: A counter for the annotations in progress.
+    '''
     
     annotation_index = 0
 
-    def __init__(self, df, id_column, text, annotation_df=None, num_records=10, random=True):
+    def __init__(self, df, text, num_records=10, id_column=None, annotations=None, random=True):
+        '''Initializes the Tortus class.
+       
+        :param df: A dataframe with texts that need to be annotated.
+        :type df: pandas.core.frame.DataFrame
+
+        :param text: The name of the column containing the text to be annotated.
+        :type text: str
+
+        :param num_records: (default=10) Number of records to annotate.
+        :type num_records: int
+        
+        :param id_column: (default=None) The name of the column containing ID of the text.
+            If None, ``id_column`` will correspond to the index of ``df``.
+        :type id_column: str
+
+        :param annotations: (default=None) The dataframe with annotations previously created in this tool.
+            If None, ``annotations`` is created with columns ``id_column``, ``text``, ``label``, ``annotated_at``.
+        :type annotation_df: pandas.core.frame.DataFrame
+
+        :param random: (default=True) Determines if records are loaded randomly or sequentially.
+        :type random: bool
+        '''
         
         self.df = df
-        self.id_column = id_column
         self.text = text
-        if annotation_df is None:
-            self.annotations = pd.DataFrame(columns=[id_column, text,'label','annotated_at'])
-        else:
-            self.annotations = annotation_df.copy()
         self.num_records = num_records
+        self.id_column = id_column
+        if annotations is None:
+             if id_column is None:
+                self.annotations = pd.DataFrame(columns=['id_column', text, 'label', 'annotated_at'])
+            else:
+                self.annotations = pd.DataFrame(columns=[id_column, text,'label','annotated_at'])
+        else:
+            self.annotations = annotations
         self.random = random
         self.subset_df = self.create_subset_df()
-            
+           
     def create_subset_df(self):
         '''
         Subsets the dataframe by the primary key and text columns with a chosen number of records.
@@ -33,12 +62,24 @@ class Tortus:
             subset_df = self.df[~self.df[self.text].isin(leave_out)]
 
         if self.random:
-            subset_df = subset_df.sample(n=self.num_records)[[self.id_column, self.text]]
+           try:
+                subset_df = subset_df.sample(n=self.num_records)[[self.id_column, self.text]]
+            except:
+                subset_df = subset_df.sample(n=self.num_records)[[self.text]]
         else:
-            subset_df = subset_df[[self.id_column, self.text]][:self.num_records]
+            try:
+                subset_df = subset_df[[self.id_column, self.text]][:self.num_records]
+            except:
+                subset_df = subset_df[[self.text]][:self.num_records]
 
         return subset_df
-        
+
+    def create_record_id(self):
+        if self.id_column is None:
+            record_id = self.subset_df.index.to_list()
+        else:
+            record_id = self.subset_df[self.id_column].to_list()
+        return record_id
         
     def annotate(self):
         '''
@@ -84,8 +125,9 @@ class Tortus:
 
 
         def sentiment_button_clicked(button):
+            record_id = self.create_record_id()
             self.annotations.loc[len(self.annotations)] = [
-                self.subset_df[self.id_column].iloc[self.annotation_index],
+                record_id[self.annotation_index],
                 self.subset_df[self.text].iloc[self.annotation_index],
                 str(button.description).lower(),
                 datetime.now().strftime('%Y-%m-%d %H:%M:%S')  
@@ -102,8 +144,9 @@ class Tortus:
         neutral_button.on_click(sentiment_button_clicked)
 
         def skip_button_clicked(button):
+            record_id = self.create_record_id()
             self.annotations.loc[len(self.annotations)] = [
-                self.subset_df[self.id_column].iloc[self.annotation_index],
+                record_id[self.annotation_index],
                 self.subset_df[self.text].iloc[self.annotation_index],
                 None,
                 datetime.now().strftime('%Y-%m-%d %H:%M:%S')  

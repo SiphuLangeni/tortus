@@ -10,6 +10,10 @@ Welcome to tortus's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+API Reference
+=============
+.. automodule:: tortus
+.. autoclass:: Tortus
 
 
 Indices and tables

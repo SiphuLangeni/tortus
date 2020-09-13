@@ -22,7 +22,7 @@ setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
     install_requires=[
-        'pandas', 'ipywidgets', 'ipython'
+        'pandas', 'ipywidgets', 'ipython', 'notebook', 'jupyter_contrib_nbextensions'
     ],
     extras_require={
         'dev': [

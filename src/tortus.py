@@ -98,9 +98,9 @@ class Tortus:
         '''Displays texts to be annotated in a UI. Loads user inputted labels and timestamps into
             ``annotations`` dataframe.
         '''
-        with open('Images/tortus250.png', 'rb') as image_file:
-            image = image_file.read()
-        logo = widgets.Image(value=image, format='png')
+        logo = widgets.HTML(
+            "<p align='center'><img width='300' align='center' alt='tortus logo' \
+                src='tortus/docs/_static/tortus_logo.svg'></p>")
         instructions = widgets.HTML(
             '<b>Click on the appropriate sentiment for the text below. Each selection requires \
                 confirmation before proceeding to the next item. To retrieve your annotations \

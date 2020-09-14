@@ -41,19 +41,25 @@ class Tortus:
         self.num_records = num_records
         self.id_column = id_column
         if annotations is None:
-             if id_column is None:
+            if id_column is None:
                 self.annotations = pd.DataFrame(columns=['id_column', text, 'label', 'annotated_at'])
             else:
                 self.annotations = pd.DataFrame(columns=[id_column, text,'label','annotated_at'])
         else:
-            self.annotations = annotations
+            self.annotations = annotations.copy()
         self.random = random
         self.subset_df = self.create_subset_df()
            
     def create_subset_df(self):
         '''
-        Subsets the dataframe by the primary key and text columns with a chosen number of records.
+        Subsets ``df`` to include only records cued for annotation.
+
+        If ``annotations`` already exists, those records will excuded from the annotation tool.
+
+        :returns: A dataframe that will be used in the annotation tool.
+        :rtype: pandas.core.frame.DataFrame
         '''
+
         if self.annotations.empty:
             subset_df = self.df.copy()
 
@@ -62,7 +68,7 @@ class Tortus:
             subset_df = self.df[~self.df[self.text].isin(leave_out)]
 
         if self.random:
-           try:
+            try:
                 subset_df = subset_df.sample(n=self.num_records)[[self.id_column, self.text]]
             except:
                 subset_df = subset_df.sample(n=self.num_records)[[self.text]]
@@ -75,6 +81,13 @@ class Tortus:
         return subset_df
 
     def create_record_id(self):
+        '''Provides a record id for ``annotations``.
+
+        :returns: A list of record ids that refer to each text in subset df created by 
+            :meth:`create_subset_df` method.
+        :rtype: list
+        '''
+
         if self.id_column is None:
             record_id = self.subset_df.index.to_list()
         else:
@@ -82,8 +95,8 @@ class Tortus:
         return record_id
         
     def annotate(self):
-        '''
-        Displays texts to be annotated and loads user inputted labels and timestamp to dataframe.
+        '''Displays texts to be annotated in a UI. Loads user inputted labels and timestamps into
+            ``annotations`` dataframe.
         '''
         with open('Images/tortus250.png', 'rb') as image_file:
             image = image_file.read()
@@ -125,12 +138,17 @@ class Tortus:
 
 
         def sentiment_button_clicked(button):
+            '''Response to button click of any sentiment buttons.
+            
+            Appends ``annotations`` with label selection.
+            :param button: Sentiment button click. 
+            '''
             record_id = self.create_record_id()
             self.annotations.loc[len(self.annotations)] = [
                 record_id[self.annotation_index],
                 self.subset_df[self.text].iloc[self.annotation_index],
                 str(button.description).lower(),
-                datetime.now().strftime('%Y-%m-%d %H:%M:%S')  
+                datetime.now().replace(microsecond=0)  
             ]
 
             with output:
@@ -144,12 +162,18 @@ class Tortus:
         neutral_button.on_click(sentiment_button_clicked)
 
         def skip_button_clicked(button):
+            '''Response to button click of the skip button.
+
+            Appends ``annotations``. Label value is ``Null``.
+            
+            :param button: Skip button click.
+            '''
             record_id = self.create_record_id()
             self.annotations.loc[len(self.annotations)] = [
                 record_id[self.annotation_index],
                 self.subset_df[self.text].iloc[self.annotation_index],
                 None,
-                datetime.now().strftime('%Y-%m-%d %H:%M:%S')  
+                datetime.now().replace(microsecond=0)  
             ]
             
             with output:
@@ -161,6 +185,13 @@ class Tortus:
         skip_button.on_click(skip_button_clicked)
 
         def confirm_button_clicked(button):
+            '''Response to click of the confirm button.
+
+            Advances the ``annotation_index`` to view the next item in the annotation tool.
+                Indicates the tool is done if ``annotation_index`` does not advance further.
+            
+            :param button: Confirmation button click.
+            '''
             if self.annotation_index < len(self.subset_df) - 1:
                 self.annotation_index += 1
                 clear_output(True)
@@ -182,6 +213,12 @@ class Tortus:
         confirm_button.on_click(confirm_button_clicked)
 
         def redo_button_clicked(button):
+            '''Response to click of the redo button.
+
+            Deletes the most recent input to ``annotations``.
+            
+            :param button: Redo button click.
+            '''
             self.annotations.drop([self.annotation_index], inplace=True)
         
             with output:
@@ -194,6 +231,12 @@ class Tortus:
         redo_button.on_click(redo_button_clicked)
 
         def quit_button_clicked(button):
+            '''Response to click of the quit button.
+
+            Stops the annotation tool and shows a progress bar to indicate how many texts were annotated.
+            
+            :param button: Quit button click.
+            '''
             clear_output(True)
             progress_bar = widgets.IntProgress(
                 value=self.annotation_index,

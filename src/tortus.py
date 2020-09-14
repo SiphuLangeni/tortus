@@ -99,13 +99,13 @@ class Tortus:
             ``annotations`` dataframe.
         '''
         logo = widgets.HTML(
-            "<p align='center'><img width='300' align='center' alt='tortus logo' \
-                src='tortus/docs/_static/tortus_logo.svg'></p>")
+            "<br><p align='center'><img width='250' align='center' alt='tortus logo' \
+                src='../docs/_static/tortus_logo.svg'></p><br>")
         instructions = widgets.HTML(
             '<b>Click on the appropriate sentiment for the text below. Each selection requires \
                 confirmation before proceeding to the next item. To retrieve your annotations \
                 at any time, call <i>your_instance.annotations</i></b>.')
-        text = HTML(self.subset_df.iloc[self.annotation_index, 1])
+        text = HTML(self.subset_df.iloc[self.annotation_index, -1])
         positive_button = widgets.Button(description='Positive')
         negative_button = widgets.Button(description='Negative')
         neutral_button = widgets.Button(description='Neutral')

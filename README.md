@@ -47,7 +47,7 @@ annotations are required at a later time.
 annotations = tortus.annotations
 ```  
 
-Click [here]() to see a sample project using tortus.  
+Click [here](https://github.com/SiphuLangeni/tortus/tree/master/sample_project) to see a sample project using tortus.  
 
 ## Developing tortus  
 

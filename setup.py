@@ -5,8 +5,8 @@ with open('README.md', 'r') as fh:
 
 setup(
     name='tortus',
-    version='0.0.1',
-    description='Annotate text for classification in a Jupyter Notebook',
+    version='0.0.2',
+    description='Easy text annotation in a Jupyter Notebook',
     url='https://github.com/SiphuLangeni/tortus',
     author='Siphu Langeni',
     author_email='szlangeni@gmail.com',

@@ -56,7 +56,7 @@ Click [here](https://github.com/SiphuLangeni/tortus/tree/master/sample_project) 
 
 ## Developing tortus  
 
-To install tortus, along with the tools you need for develop and run tests, run the followint in your virtualenv:  
+To install tortus, along with the tools you need to develop and run tests, run the following in your virtualenv:  
 
 ```bash
 $ pip install -e .[dev]

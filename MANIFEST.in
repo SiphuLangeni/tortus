@@ -1,2 +1,9 @@
+include *.in
 include *.txt
-recursive-include Images *.png
+recursive-include docs *.bat
+recursive-include docs *.py
+recursive-include docs *.rst
+recursive-include docs *.svg
+recursive-include docs Makefile
+recursive-include sample_project *.csv
+recursive-include sample_project *.ipynb

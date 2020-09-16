@@ -8,33 +8,32 @@ class Tortus:
     '''Text annotation within a Jupyter Notebook
     
     :attr annotation_index: A counter for the annotations in progress.
+
+    :param df: A dataframe with texts that need to be annotated.
+    :type df: pandas.core.frame.DataFrame
+
+    :param text: The name of the column containing the text to be annotated.
+    :type text: str
+
+    :param num_records: (default=10) Number of records to annotate.
+    :type num_records: int
+    
+    :param id_column: (default=None) The name of the column containing ID of the text.
+        If None, ``id_column`` will correspond to the index of ``df``.
+    :type id_column: str
+
+    :param annotations: (default=None) The dataframe with annotations previously created in this tool.
+        If None, ``annotations`` is created with columns ``id_column``, ``text``, ``label``, ``annotated_at``.
+    :type annotation_df: pandas.core.frame.DataFrame
+
+    :param random: (default=True) Determines if records are loaded randomly or sequentially.
+    :type random: bool
     '''
     
     annotation_index = 0
 
     def __init__(self, df, text, num_records=10, id_column=None, annotations=None, random=True):
-        '''Initializes the Tortus class.
-       
-        :param df: A dataframe with texts that need to be annotated.
-        :type df: pandas.core.frame.DataFrame
-
-        :param text: The name of the column containing the text to be annotated.
-        :type text: str
-
-        :param num_records: (default=10) Number of records to annotate.
-        :type num_records: int
-        
-        :param id_column: (default=None) The name of the column containing ID of the text.
-            If None, ``id_column`` will correspond to the index of ``df``.
-        :type id_column: str
-
-        :param annotations: (default=None) The dataframe with annotations previously created in this tool.
-            If None, ``annotations`` is created with columns ``id_column``, ``text``, ``label``, ``annotated_at``.
-        :type annotation_df: pandas.core.frame.DataFrame
-
-        :param random: (default=True) Determines if records are loaded randomly or sequentially.
-        :type random: bool
-        '''
+        '''Initializes the Tortus class.'''
         
         self.df = df
         self.text = text

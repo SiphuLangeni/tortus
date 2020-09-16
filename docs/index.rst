@@ -3,17 +3,27 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to tortus's documentation!
-==================================
+tortus documentation
+====================
+
+.. figure:: _static/tortus_logo.svg
+   :width: 300
+
+|
+
+Welcome to the tortus documentation. **tortus** is a python package that makes it 
+easy to add labels to text data within a Jupyter Notebook. Ideal use is for datasets 
+that can be managed within a pandas dataframe. Positive, negative and neutral labels 
+can be applied to a selected number of records. Timestamped annotations can be saved 
+in a dataframe for future use in NLP projects.
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-API Reference
-=============
-.. automodule:: tortus
-.. autoclass:: Tortus
+   installation
+   usage
+   api
 
 
 Indices and tables

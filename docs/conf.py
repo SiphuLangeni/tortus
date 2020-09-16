@@ -33,7 +33,7 @@ extensions = [
     'sphinx.ext.coverage'
 ]
 
-autoclass_content = 'both'
+autoclass_content = 'class'
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 

@@ -16,8 +16,9 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
-        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+        'Framework :: Jupyter',
         'Operating System :: OS Independent'
+        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
     ],
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -32,6 +33,3 @@ setup(
 
 
 )
-
-
-

@@ -19,7 +19,7 @@ setup(
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Framework :: Jupyter',
-        'Operating System :: OS Independent'
+        'Operating System :: OS Independent',
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
     ],
     keywords=[

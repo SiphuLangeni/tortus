@@ -6,5 +6,6 @@
 API Reference
 =============
 .. automodule:: tortus
+
 .. autoclass:: Tortus
    :members: annotate

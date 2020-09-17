@@ -33,7 +33,7 @@ class Tortus:
     annotation_index = 0
 
     def __init__(self, df, text, num_records=10, id_column=None, annotations=None, random=True,
-                buttons=['Positve, Negative, Neutral']):
+                buttons=['Positve', 'Negative', 'Neutral']):
         '''Initializes the Tortus class.'''
         
         self.df = df
@@ -109,8 +109,9 @@ class Tortus:
         text = HTML(self.subset_df.iloc[self.annotation_index, -1])
         
         btn = []
-        for button in buttons:
+        for button in self.buttons:
             btn.append(widgets.Button(description=button))
+        label_buttons = widgets.HBox(btn)
         # positive_button = widgets.Button(description='Positive')
         # negative_button = widgets.Button(description='Negative')
         # neutral_button = widgets.Button(description='Neutral')
@@ -134,7 +135,7 @@ class Tortus:
                 width='100%')
         
         logo_box = widgets.HBox(children=[logo],layout=logo_layout)
-        sentiment_buttons = widgets.HBox([btn, skip_button, quit_button])
+        sentiment_buttons = widgets.HBox([label_buttons, skip_button, quit_button])
         confirmation_buttons = widgets.HBox([confirm_button, redo_button])
         output = widgets.Output()
 
@@ -142,11 +143,11 @@ class Tortus:
         confirmation_buttons.layout.visibility = 'hidden'    
 
 
-        def sentiment_button_clicked(button):
+        def label_buttons_clicked(button):
             '''Response to button click of any sentiment buttons.
             
             Appends ``annotations`` with label selection.
-            :param button: Sentiment button click. 
+            :param button: btn click. 
             '''
             record_id = self.create_record_id()
             self.annotations.loc[len(self.annotations)] = [
@@ -162,9 +163,11 @@ class Tortus:
                 print('The text has', str(button.description).lower(), 'sentiment.')
                 confirmation_buttons.layout.visibility = 'visible'
 
-        positive_button.on_click(sentiment_button_clicked)
-        negative_button.on_click(sentiment_button_clicked)
-        neutral_button.on_click(sentiment_button_clicked)
+        for i in btn:
+            i.on_click(label_buttons_clicked)
+        # positive_button.on_click(sentiment_button_clicked)
+        # negative_button.on_click(sentiment_button_clicked)
+        # neutral_button.on_click(sentiment_button_clicked)
 
         def skip_button_clicked(button):
             '''Response to button click of the skip button.

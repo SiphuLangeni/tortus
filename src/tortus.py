@@ -107,9 +107,10 @@ class Tortus:
                 confirmation before proceeding to the next item. To retrieve your annotations \
                 at any time, call <i>your_instance.annotations</i></b>.')
         text = HTML(self.subset_df.iloc[self.annotation_index, -1])
-        for button in buttons:
-            button + '_button' = widgets.Button(description=button)
         
+        btn = []
+        for button in buttons:
+            btn.append(widgets.Button(description=button))
         # positive_button = widgets.Button(description='Positive')
         # negative_button = widgets.Button(description='Negative')
         # neutral_button = widgets.Button(description='Neutral')
@@ -133,7 +134,7 @@ class Tortus:
                 width='100%')
         
         logo_box = widgets.HBox(children=[logo],layout=logo_layout)
-        sentiment_buttons = widgets.HBox([positive_button, negative_button, neutral_button, skip_button, quit_button])
+        sentiment_buttons = widgets.HBox([btn, skip_button, quit_button])
         confirmation_buttons = widgets.HBox([confirm_button, redo_button])
         output = widgets.Output()
 

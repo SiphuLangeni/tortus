@@ -32,7 +32,8 @@ class Tortus:
     
     annotation_index = 0
 
-    def __init__(self, df, text, num_records=10, id_column=None, annotations=None, random=True):
+    def __init__(self, df, text, num_records=10, id_column=None, annotations=None, random=True,
+                buttons=['Positve, Negative, Neutral']):
         '''Initializes the Tortus class.'''
         
         self.df = df
@@ -47,6 +48,7 @@ class Tortus:
         else:
             self.annotations = annotations.copy()
         self.random = random
+        self.buttons = buttons
         self.subset_df = self.create_subset_df()
            
     def create_subset_df(self):
@@ -105,9 +107,12 @@ class Tortus:
                 confirmation before proceeding to the next item. To retrieve your annotations \
                 at any time, call <i>your_instance.annotations</i></b>.')
         text = HTML(self.subset_df.iloc[self.annotation_index, -1])
-        positive_button = widgets.Button(description='Positive')
-        negative_button = widgets.Button(description='Negative')
-        neutral_button = widgets.Button(description='Neutral')
+        for button in buttons:
+            button + '_button' = widgets.Button(description=button)
+        
+        # positive_button = widgets.Button(description='Positive')
+        # negative_button = widgets.Button(description='Negative')
+        # neutral_button = widgets.Button(description='Neutral')
         skip_button = widgets.Button(description='Skip')
         confirm_button = widgets.Button(description='Confirm selection')
         redo_button = widgets.Button(description='Try again')

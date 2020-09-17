@@ -28,12 +28,15 @@ class Tortus:
 
     :param random: (default=True) Determines if records are loaded randomly or sequentially.
     :type random: bool
+
+    :param labels: Annotation labels., default=['Positive', 'Negative', 'Neutral']
+    :type labels: list
     '''
     
     annotation_index = 0
 
     def __init__(self, df, text, num_records=10, id_column=None, annotations=None, random=True,
-                buttons=['Positve', 'Negative', 'Neutral']):
+                labels=['Positve', 'Negative', 'Neutral']):
         '''Initializes the Tortus class.'''
         
         self.df = df
@@ -48,7 +51,7 @@ class Tortus:
         else:
             self.annotations = annotations.copy()
         self.random = random
-        self.buttons = buttons
+        self.labels = labels
         self.subset_df = self.create_subset_df()
            
     def create_subset_df(self):
@@ -108,13 +111,10 @@ class Tortus:
                 at any time, call <i>your_instance.annotations</i></b>.')
         text = HTML(self.subset_df.iloc[self.annotation_index, -1])
         
-        btn = []
-        for button in self.buttons:
-            btn.append(widgets.Button(description=button))
-        label_buttons = widgets.HBox(btn)
-        # positive_button = widgets.Button(description='Positive')
-        # negative_button = widgets.Button(description='Negative')
-        # neutral_button = widgets.Button(description='Neutral')
+        labels = []
+        for label in self.labels:
+            labels.append(widgets.Button(description=label))
+        label_buttons = widgets.HBox(labels)
         skip_button = widgets.Button(description='Skip')
         confirm_button = widgets.Button(description='Confirm selection')
         redo_button = widgets.Button(description='Try again')
@@ -147,7 +147,7 @@ class Tortus:
             '''Response to button click of any sentiment buttons.
             
             Appends ``annotations`` with label selection.
-            :param button: btn click. 
+            :param button: Label buttons click. 
             '''
             record_id = self.create_record_id()
             self.annotations.loc[len(self.annotations)] = [
@@ -163,11 +163,8 @@ class Tortus:
                 print('The text has', str(button.description).lower(), 'sentiment.')
                 confirmation_buttons.layout.visibility = 'visible'
 
-        for i in btn:
-            i.on_click(label_buttons_clicked)
-        # positive_button.on_click(sentiment_button_clicked)
-        # negative_button.on_click(sentiment_button_clicked)
-        # neutral_button.on_click(sentiment_button_clicked)
+        for label in labels:
+            label.on_click(label_buttons_clicked)
 
         def skip_button_clicked(button):
             '''Response to button click of the skip button.

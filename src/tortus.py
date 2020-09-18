@@ -5,7 +5,7 @@ from ipywidgets import HTML, Output, Layout
 from IPython.display import display, clear_output, SVG
 
 tortus_logo = SVG(data='../docs/_static/tortus_logo.svg')
-welcome = widgets.HTML("<h2 style='text-align:center;'>easy text annotation in a Jupyter Notebook</h2>")
+welcome = widgets.HTML("<h2 style='text-align:center'>easy text annotation in a Jupyter Notebook</h2>")
 display(tortus_logo, welcome)
 
 class Tortus:
@@ -135,7 +135,8 @@ class Tortus:
                 step=1,
                 description=f'{self.annotation_index + 1}/{self.num_records}',
                 bar_style='',
-                orientation='horizontal')
+                orientation='horizontal',
+                layout=Layout(width='50%', align_content='center'))
         progress_bar.style.bar_color = '#36a849'
     
         
@@ -216,8 +217,10 @@ class Tortus:
                     step=1,
                     description=f'{self.annotation_index + 1}/{self.num_records}',
                     bar_style='',
-                    orientation='horizontal')
-                display(HTML('<h3>Annotations are complete.</h3>'))
+                    orientation='horizontal',
+                    layout=Layout(width='75%', align_content='center'))
+                progress_bar.style.bar_color = '#36a849'
+                display(HTML("<h3 style='text-align:center'>Annotations are complete.</h3>"))
                 display (progress_bar)
 
         confirm_button.on_click(confirm_button_clicked)
@@ -255,8 +258,10 @@ class Tortus:
                 step=1,
                 description=f'{self.annotation_index}/{self.num_records}',
                 bar_style='',
-                orientation='horizontal')
-            display(HTML('<h3>Annotations stopped.</h3>'))
+                orientation='horizontal',
+                layout=Layout(width='75%', align_content='center'))
+            progress_bar.style.bar_color = '#36a849'
+            display(HTML("<h3 style='text-align:center'>Annotations stopped.</h3>"))
             display (progress_bar)
             
         quit_button.on_click(quit_button_clicked)

@@ -2,7 +2,14 @@ import pandas as pd
 from datetime import datetime
 import ipywidgets as widgets
 from ipywidgets import HTML, Output
-from IPython.display import display, clear_output
+from IPython.display import display, clear_output, SVG
+
+tortus_logo = SVG(data='../docs/_static/tortus_logo.svg')
+# with open('../docs/_build/html/_images/tortus_logo.png', 'rb') as image_file:
+#     image = image_file.read()
+#     logo = widgets.Image(value=image, format='png', width='50%')
+welcome = widgets.HTML("<h2 style='text-align:center;'>easy text annotation in a Jupyter Notebook</h2>")
+display(tortus_logo, welcome)
 
 class Tortus:
     '''Text annotation within a Jupyter Notebook
@@ -102,14 +109,19 @@ class Tortus:
         '''Displays texts to be annotated in a UI. Loads user inputted labels and timestamps into
             ``annotations`` dataframe.
         '''
-        logo = widgets.HTML(
-            "<br><p align='center'><img width='250' align='center' alt='tortus logo' \
-                src='../docs/_static/tortus_logo.svg'></p><br>")
+
+        with open('../docs/_build/html/_images/tortus_logo.png', 'rb') as image_file:
+            image = image_file.read()
+            logo = widgets.Image(value=image, format='png', width='50%')
+        # logo = SVG(data='../docs/_static/tortus_logo.svg')
+        # logo = widgets.HTML(
+        #     "<br><p align='center'><img width='250' align='center' alt='tortus logo' \
+        #         src='../docs/_static/tortus_logo.svg'></p><br>")
         instructions = widgets.HTML(
-            '<b>Click on the appropriate sentiment for the text below. Each selection requires \
-                confirmation before proceeding to the next item. To retrieve your annotations \
-                at any time, call <i>your_instance.annotations</i></b>.')
-        text = HTML(self.subset_df.iloc[self.annotation_index, -1])
+            '<h4>Click on the appropriate sentiment for the text below. Each selection requires \
+                confirmation before proceeding to the next item.</h4>')
+        annotation_text = self.subset_df.iloc[self.annotation_index, -1]
+        text = widgets.HTML(self.subset_df.iloc[self.annotation_index, -1])
         
         labels = []
         for label in self.labels:
@@ -128,18 +140,19 @@ class Tortus:
                 bar_style='',
                 orientation='horizontal')
         
-        logo_layout = widgets.Layout(
-                display='flex',
-                flex_flow='column',
-                align_items='center',
-                width='100%')
+        # logo_layout = widgets.Layout(
+        #         display='flex',
+        #         flex_flow='column',
+        #         align_items='center',
+        #         width='100%')
         
-        logo_box = widgets.HBox(children=[logo],layout=logo_layout)
+        # logo_box = widgets.HBox(children=[logo],layout=logo_layout)
+        header = widgets.HBox([logo, progress_bar])
         sentiment_buttons = widgets.HBox([label_buttons, skip_button, quit_button])
         confirmation_buttons = widgets.HBox([confirm_button, redo_button])
         output = widgets.Output()
 
-        display(logo_box, instructions, text, sentiment_buttons, confirmation_buttons, progress_bar, output)
+        display(header, instructions, text, sentiment_buttons, confirmation_buttons, progress_bar, output)
         confirmation_buttons.layout.visibility = 'hidden'    
 
 

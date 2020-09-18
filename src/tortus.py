@@ -4,9 +4,9 @@ import ipywidgets as widgets
 from ipywidgets import HTML, Output, Layout
 from IPython.display import display, clear_output, SVG
 
-tortus_logo = SVG(data='../docs/_static/tortus_logo.svg')
-welcome = widgets.HTML("<h2 style='text-align:center'>easy text annotation in a Jupyter Notebook</h2>")
-display(tortus_logo, welcome)
+# tortus_logo = SVG(data='../docs/_static/tortus_logo.svg')
+# welcome = widgets.HTML("<h2 style='text-align:center'>easy text annotation in a Jupyter Notebook</h2>")
+# display(tortus_logo, welcome)
 
 class Tortus:
     '''Text annotation within a Jupyter Notebook
@@ -119,12 +119,15 @@ class Tortus:
         
         labels = []
         for label in self.labels:
-            labels.append(widgets.Button(description=label))
+            label_button = widgets.Button(description=label)
+            label_button.style.button_color = '#eeeeee'
+            label_button.style.font_weight = 'bold'
+            labels.append(label_button)
         label_buttons = widgets.HBox(labels)
         skip_button = widgets.Button(description='Skip')
         confirm_button = widgets.Button(description='Confirm selection')
         redo_button = widgets.Button(description='Try again')
-        quit_button = widgets.Button(description='Quit')
+        # quit_button = widgets.Button(description='Quit')
         progress_bar = widgets.IntProgress(
                 value=self.annotation_index,
                 min=0,
@@ -138,7 +141,7 @@ class Tortus:
     
         
         header = widgets.VBox([widgets.HBox([logo, progress_bar]), rules])
-        sentiment_buttons = widgets.HBox([label_buttons, skip_button, quit_button])
+        sentiment_buttons = widgets.HBox([label_buttons, skip_button])
         confirmation_buttons = widgets.HBox([confirm_button, redo_button])
         output = widgets.Output()
 
@@ -153,7 +156,6 @@ class Tortus:
             :param button: Label buttons click. 
             '''
             button.style.button_color = '#36a849'
-            # label.style.button_color = '#36a849'
             record_id = self.create_record_id()
             self.annotations.loc[len(self.annotations)] = [
                 record_id[self.annotation_index],
@@ -161,14 +163,15 @@ class Tortus:
                 str(button.description).lower(),
                 datetime.now().replace(microsecond=0)  
             ]
+            for label in labels:
+                label.disabled = True
 
             with output:
                 clear_output(True)
-                label.layout.visibility = 'visible'
+
                 
                 # sentiment_buttons.layout.visibility = 'hidden'
 
-                print('The text has', str(button.description).lower(), 'sentiment.')
                 confirmation_buttons.layout.visibility = 'visible'
 
         for label in labels:
@@ -247,25 +250,25 @@ class Tortus:
 
         redo_button.on_click(redo_button_clicked)
 
-        def quit_button_clicked(button):
-            '''Response to click of the quit button.
+        # def quit_button_clicked(button):
+        #     '''Response to click of the quit button.
 
-            Stops the annotation tool and shows a progress bar to indicate how many texts were annotated.
+        #     Stops the annotation tool and shows a progress bar to indicate how many texts were annotated.
             
-            :param button: Quit button click.
-            '''
-            clear_output(True)
-            progress_bar = widgets.IntProgress(
-                value=self.annotation_index,
-                min=0,
-                max=self.num_records,
-                step=1,
-                description=f'{self.annotation_index}/{self.num_records}',
-                bar_style='',
-                orientation='horizontal',
-                layout=Layout(width='75%', align_content='center'))
-            progress_bar.style.bar_color = '#36a849'
-            display(HTML("<h3 style='text-align:center'>Annotations stopped.</h3>"))
-            display (progress_bar)
+        #     :param button: Quit button click.
+        #     '''
+        #     clear_output(True)
+        #     progress_bar = widgets.IntProgress(
+        #         value=self.annotation_index,
+        #         min=0,
+        #         max=self.num_records,
+        #         step=1,
+        #         description=f'{self.annotation_index}/{self.num_records}',
+        #         bar_style='',
+        #         orientation='horizontal',
+        #         layout=Layout(width='75%', align_content='center'))
+        #     progress_bar.style.bar_color = '#36a849'
+        #     display(HTML("<h3 style='text-align:center'>Annotations stopped.</h3>"))
+        #     display (progress_bar)
             
-        quit_button.on_click(quit_button_clicked)
+        # quit_button.on_click(quit_button_clicked)

@@ -125,6 +125,7 @@ class Tortus:
             labels.append(label_button)
         label_buttons = widgets.HBox(labels)
         skip_button = widgets.Button(description='Skip')
+        skip_button.style.font_weight = 'bold'
         confirm_button = widgets.Button(description='Confirm selection')
         redo_button = widgets.Button(description='Try again')
         # quit_button = widgets.Button(description='Quit')

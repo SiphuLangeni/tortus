@@ -110,10 +110,7 @@ class Tortus:
         with open('../docs/_build/html/_images/tortus_logo.png', 'rb') as image_file:
             image = image_file.read()
             logo = widgets.Image(value=image, format='png', width='40%')
-        # logo = SVG(data='../docs/_static/tortus_logo.svg')
-        # logo = widgets.HTML(
-        #     "<br><p align='center'><img width='250' align='center' alt='tortus logo' \
-        #         src='../docs/_static/tortus_logo.svg'></p><br>")
+
         rules = widgets.HTML(
             '<h4>Click on the label corresponding with the text below. Each selection requires \
                 confirmation before proceeding to the next item.</h4>')
@@ -155,6 +152,8 @@ class Tortus:
             Appends ``annotations`` with label selection.
             :param button: Label buttons click. 
             '''
+            button.style.button_color = '#36a849'
+            # label.style.button_color = '#36a849'
             record_id = self.create_record_id()
             self.annotations.loc[len(self.annotations)] = [
                 record_id[self.annotation_index],
@@ -165,12 +164,17 @@ class Tortus:
 
             with output:
                 clear_output(True)
-                sentiment_buttons.layout.visibility = 'hidden'
+                label.layout.visibility = 'visible'
+                
+                # sentiment_buttons.layout.visibility = 'hidden'
+
                 print('The text has', str(button.description).lower(), 'sentiment.')
                 confirmation_buttons.layout.visibility = 'visible'
 
         for label in labels:
             label.on_click(label_buttons_clicked)
+            # label.visibility
+            # label.style.button_color = '#36a849'
 
         def skip_button_clicked(button):
             '''Response to button click of the skip button.

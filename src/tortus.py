@@ -1,7 +1,7 @@
 import pandas as pd
 from datetime import datetime
 import ipywidgets as widgets
-from ipywidgets import HTML, Output, Layout
+from ipywidgets import HTML, Output, Button, Layout, ButtonStyle, Box, GridBox, VBox, HBox
 from IPython.display import display, clear_output, SVG
 
 # tortus_logo = SVG(data='../docs/_static/tortus_logo.svg')
@@ -33,7 +33,7 @@ class Tortus:
     :param random: (default=True) Determines if records are loaded randomly or sequentially.
     :type random: bool
 
-    :param labels: Annotation labels., default=['Positive', 'Negative', 'Neutral']
+    :param labels: Annotation labels, default=['Positive', 'Negative', 'Neutral']
     :type labels: list
     '''
     
@@ -119,25 +119,31 @@ class Tortus:
         
         labels = []
         for label in self.labels:
-            label_button = widgets.Button(description=label,
-                                          layout=Layout(border='solid'))
-            label_button.style.button_color = '#eeeeee'
-            label_button.style.font_weight = 'bold'
+            label_button = Button(
+                description=label,
+                layout=Layout(border='solid', flex='1 1 auto', width='auto'),
+                style=ButtonStyle(button_color='#eeeeee', font_weight='bold'))
             labels.append(label_button)
 
         label_buttons = widgets.HBox(labels)
-        skip_button = widgets.Button(description='Skip',
-                                     layout=Layout(border='solid'))
-        skip_button.style.button_color = '#eeeeee'
-        skip_button.style.font_weight = 'bold'
-        confirm_button = widgets.Button(description='Confirm selection',
-                                        layout=Layout(border='solid'))
-        confirm_button.style.button_color = '#eeeeee'
-        confirm_button.style.font_weight = 'bold'
-        redo_button = widgets.Button(description='Try again',
-                                     layout=Layout(border='solid'))
-        redo_button.style.button_color = '#eeeeee'
-        redo_button.style.font_weight = 'bold'
+        skip_button = widgets.Button(
+            description='Skip',
+            layout=Layout(border='solid', flex='1 1 auto', width='auto'),
+            style=ButtonStyle(button_color='#eeeeee', font_weight='bold'))
+        # skip_button.style.button_color = '#eeeeee'
+        # skip_button.style.font_weight = 'bold'
+        confirm_button = Button(
+            description='Confirm selection',
+            layout=Layout(border='solid', flex='1 1 auto', width='auto', grid_area='confirm'),
+            style=ButtonStyle(button_color='#eeeeee', font_weight='bold'))
+        # confirm_button.style.button_color = '#eeeeee'
+        # confirm_button.style.font_weight = 'bold'
+        redo_button = Button(
+            description='Try again',
+            layout=Layout(border='solid', flex='1 1 auto', width='auto', grid_area='redo'),
+            style=ButtonStyle(button_color='#eeeeee', font_weight='bold'))
+        # redo_button.style.button_color = '#eeeeee'
+        # redo_button.style.font_weight = 'bold'
         progress_bar = widgets.IntProgress(
                 value=self.annotation_index,
                 min=0,
@@ -151,12 +157,43 @@ class Tortus:
     
         
         header = widgets.VBox([widgets.HBox([logo, progress_bar]), rules])
-        sentiment_buttons = widgets.HBox([label_buttons, skip_button])
-        confirmation_buttons = widgets.HBox([confirm_button, redo_button])
+
+        sentiment = labels + [skip_button]
+        confirm = [confirm_button, redo_button]
+
+        box_layout = Layout(
+            display='flex',
+            flex_flow='row',
+            align_items='stretch',
+            width='100%'
+        )
+
+        box_sentiment = Box(sentiment, layout=box_layout)
+        box_confirm = Box(confirm, layout=box_layout)
+
+        all_buttons = VBox(
+            [box_sentiment, box_confirm],
+            layout=Layout(width='auto', grid_area='all_buttons')
+        )
+
+        ui = GridBox(
+            children=[all_buttons],
+            layout=Layout(
+                width='100%',
+                grid_template_rows='auto auto',
+                grid_template_columns='15% 70% 15%',
+                grid_template_areas='''
+                ". all_buttons ."
+                ''')
+        )
+        
         output = widgets.Output()
 
-        display(header, text, sentiment_buttons, confirmation_buttons, output)
-        confirmation_buttons.layout.visibility = 'hidden'    
+        # display(header, text, sentiment_buttons, confirmation_buttons, output)
+        display(header, text, ui, output)
+        # confirmation_buttons.layout.visibility = 'hidden'
+        confirm_button.layout.visibility = 'hidden'
+        redo_button.layout.visibility = 'hidden'    
 
 
         def label_buttons_clicked(button):
@@ -185,7 +222,8 @@ class Tortus:
             with output:
                 clear_output(True)
                 sentiment_buttons.layout.visibility = 'visible'
-                confirmation_buttons.layout.visibility = 'visible'
+                confirm_button.layout.visibility = 'visible'
+                redo_button.layout.visibility = 'visible'
 
         for label in labels:
             label.on_click(label_buttons_clicked)
@@ -216,7 +254,8 @@ class Tortus:
             with output:
                 clear_output(True)
                 sentiment_buttons.layout.visibility = 'visible'
-                confirmation_buttons.layout.visibility = 'visible'
+                confirm_button.layout.visibility = 'visible'
+                redo_button.layout.visibility = 'visible'
             
         skip_button.on_click(skip_button_clicked)
 
@@ -270,7 +309,9 @@ class Tortus:
             with output:
                 clear_output(True)
                 sentiment_buttons.layout.visibility = 'visible'
-                confirmation_buttons.layout.visibility = 'hidden'
+                confirm_button.layout.visibility = 'hidden'
+                redo_button.layout.visibility = 'hidden'
+
 
 
         redo_button.on_click(redo_button_clicked)

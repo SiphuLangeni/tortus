@@ -4,9 +4,9 @@ import ipywidgets as widgets
 from ipywidgets import HTML, Output, Button, Layout, ButtonStyle, Box, GridBox, VBox, HBox
 from IPython.display import display, clear_output, SVG
 
-# tortus_logo = SVG(data='../docs/_static/tortus_logo.svg')
-# welcome = widgets.HTML("<h2 style='text-align:center'>easy text annotation in a Jupyter Notebook</h2>")
-# display(tortus_logo, welcome)
+tortus_logo = SVG(data='../docs/_static/tortus_logo.svg')
+welcome = widgets.HTML("<h2 style='text-align:center'>easy text annotation in a Jupyter Notebook</h2>")
+display(tortus_logo, welcome)
 
 class Tortus:
     '''Text annotation within a Jupyter Notebook
@@ -36,13 +36,12 @@ class Tortus:
     :param labels: Annotation labels, default=['Positive', 'Negative', 'Neutral']
     :type labels: list
     '''
-    
     annotation_index = 0
+
 
     def __init__(self, df, text, num_records=10, id_column=None, annotations=None, random=True,
                 labels=['Positve', 'Negative', 'Neutral']):
         '''Initializes the Tortus class.'''
-        
         self.df = df
         self.text = text
         self.num_records = num_records
@@ -57,7 +56,8 @@ class Tortus:
         self.random = random
         self.labels = labels
         self.subset_df = self.create_subset_df()
-           
+
+
     def create_subset_df(self):
         '''
         Subsets ``df`` to include only records cued for annotation.
@@ -67,7 +67,6 @@ class Tortus:
         :returns: A dataframe that will be used in the annotation tool.
         :rtype: pandas.core.frame.DataFrame
         '''
-
         if self.annotations.empty:
             subset_df = self.df.copy()
 
@@ -88,6 +87,7 @@ class Tortus:
 
         return subset_df
 
+
     def create_record_id(self):
         '''Provides a record id for ``annotations``.
 
@@ -95,25 +95,35 @@ class Tortus:
             :meth:`create_subset_df` method.
         :rtype: list
         '''
-
         if self.id_column is None:
             record_id = self.subset_df.index.to_list()
         else:
             record_id = self.subset_df[self.id_column].to_list()
         return record_id
-        
+
+    def make_html(text):
+        '''Changes text to html for annotation widget user interface.
+
+        :param text: Text for conversion to html.
+        :type text: str
+
+        :returns: HTML snippet
+        :rtype: str
+        '''
+        html = '<h4>' + text + '</h4>'
+        return html
+
     def annotate(self):
         '''Displays texts to be annotated in a UI. Loads user inputted labels and timestamps into
             ``annotations`` dataframe.
         '''
-
         with open('../docs/_build/html/_images/tortus_logo.png', 'rb') as image_file:
             image = image_file.read()
             logo = widgets.Image(value=image, format='png', width='40%')
 
         rules = widgets.HTML(
-            '<h4>Click on the label corresponding with the text below. Each selection requires \
-                confirmation before proceeding to the next item.</h4>')
+            'Click on the label corresponding with the text below. Each selection requires \
+                confirmation before proceeding to the next item.')
         annotation_text = self.subset_df.iloc[self.annotation_index, -1]
         text = widgets.HTML(self.subset_df.iloc[self.annotation_index, -1])
         
@@ -126,24 +136,22 @@ class Tortus:
             labels.append(label_button)
 
         label_buttons = widgets.HBox(labels)
+        
         skip_button = widgets.Button(
             description='Skip',
             layout=Layout(border='solid', flex='1 1 auto', width='auto'),
             style=ButtonStyle(button_color='#eeeeee', font_weight='bold'))
-        # skip_button.style.button_color = '#eeeeee'
-        # skip_button.style.font_weight = 'bold'
+       
         confirm_button = Button(
             description='Confirm selection',
             layout=Layout(border='solid', flex='1 1 auto', width='auto', grid_area='confirm'),
             style=ButtonStyle(button_color='#eeeeee', font_weight='bold'))
-        # confirm_button.style.button_color = '#eeeeee'
-        # confirm_button.style.font_weight = 'bold'
+        
         redo_button = Button(
             description='Try again',
             layout=Layout(border='solid', flex='1 1 auto', width='auto', grid_area='redo'),
             style=ButtonStyle(button_color='#eeeeee', font_weight='bold'))
-        # redo_button.style.button_color = '#eeeeee'
-        # redo_button.style.font_weight = 'bold'
+        
         progress_bar = widgets.IntProgress(
                 value=self.annotation_index,
                 min=0,
@@ -155,9 +163,9 @@ class Tortus:
                 layout=Layout(width='50%', align_content='center'))
         progress_bar.style.bar_color = '#36a849'
     
-        
-        header = widgets.VBox([widgets.HBox([logo, progress_bar]), rules])
-
+        header = VBox([HBox([logo, progress_bar]), rules])
+        sentiment_buttons = HBox([label_buttons, skip_button])
+        confirmation_buttons = HBox([confirm_button, redo_button])
         sentiment = labels + [skip_button]
         confirm = [confirm_button, redo_button]
 
@@ -189,9 +197,7 @@ class Tortus:
         
         output = widgets.Output()
 
-        # display(header, text, sentiment_buttons, confirmation_buttons, output)
         display(header, text, ui, output)
-        # confirmation_buttons.layout.visibility = 'hidden'
         confirm_button.layout.visibility = 'hidden'
         redo_button.layout.visibility = 'hidden'    
 
@@ -227,8 +233,7 @@ class Tortus:
 
         for label in labels:
             label.on_click(label_buttons_clicked)
-            # label.visibility
-            # label.style.button_color = '#36a849'
+        
 
         def skip_button_clicked(button):
             '''Response to button click of the skip button.

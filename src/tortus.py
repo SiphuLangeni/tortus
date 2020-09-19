@@ -1,11 +1,10 @@
 import pandas as pd
 from datetime import datetime
-import ipywidgets as widgets
-from ipywidgets import HTML, Output, Button, Layout, ButtonStyle, Box, GridBox, VBox, HBox
-from IPython.display import display, clear_output, SVG
+from ipywidgets import *
+from IPython.display import SVG, display, clear_output
 
 tortus_logo = SVG(data='../docs/_static/tortus_logo.svg')
-welcome = widgets.HTML("<h2 style='text-align:center'>easy text annotation in a Jupyter Notebook</h2>")
+welcome = HTML("<h2 style='text-align:center'>easy text annotation in a Jupyter Notebook</h2>")
 display(tortus_logo, welcome)
 
 class Tortus:
@@ -101,7 +100,7 @@ class Tortus:
             record_id = self.subset_df[self.id_column].to_list()
         return record_id
 
-    def make_html(text):
+    def make_html(self, text):
         '''Changes text to html for annotation widget user interface.
 
         :param text: Text for conversion to html.
@@ -119,13 +118,14 @@ class Tortus:
         '''
         with open('../docs/_build/html/_images/tortus_logo.png', 'rb') as image_file:
             image = image_file.read()
-            logo = widgets.Image(value=image, format='png', width='40%')
+            logo = Image(value=image, format='png', width='40%')
 
-        rules = widgets.HTML(
+        rules = HTML(
             'Click on the label corresponding with the text below. Each selection requires \
                 confirmation before proceeding to the next item.')
         annotation_text = self.subset_df.iloc[self.annotation_index, -1]
-        text = widgets.HTML(self.subset_df.iloc[self.annotation_index, -1])
+        html = self.make_html(self.subset_df.iloc[self.annotation_index, -1])
+        text = widgets.HTML(html)
         
         labels = []
         for label in self.labels:
@@ -135,9 +135,9 @@ class Tortus:
                 style=ButtonStyle(button_color='#eeeeee', font_weight='bold'))
             labels.append(label_button)
 
-        label_buttons = widgets.HBox(labels)
+        label_buttons = HBox(labels)
         
-        skip_button = widgets.Button(
+        skip_button = Button(
             description='Skip',
             layout=Layout(border='solid', flex='1 1 auto', width='auto'),
             style=ButtonStyle(button_color='#eeeeee', font_weight='bold'))
@@ -152,7 +152,7 @@ class Tortus:
             layout=Layout(border='solid', flex='1 1 auto', width='auto', grid_area='redo'),
             style=ButtonStyle(button_color='#eeeeee', font_weight='bold'))
         
-        progress_bar = widgets.IntProgress(
+        progress_bar = IntProgress(
                 value=self.annotation_index,
                 min=0,
                 max=self.num_records,
@@ -160,10 +160,10 @@ class Tortus:
                 description=f'{self.annotation_index + 1}/{self.num_records}',
                 bar_style='',
                 orientation='horizontal',
-                layout=Layout(width='50%', align_content='center'))
+                layout=Layout(width='50%', align_self='flex-end'))
         progress_bar.style.bar_color = '#36a849'
     
-        header = VBox([HBox([logo, progress_bar]), rules])
+        header = HBox([logo, progress_bar])
         sentiment_buttons = HBox([label_buttons, skip_button])
         confirmation_buttons = HBox([confirm_button, redo_button])
         sentiment = labels + [skip_button]
@@ -195,9 +195,9 @@ class Tortus:
                 ''')
         )
         
-        output = widgets.Output()
+        output = Output()
 
-        display(header, text, ui, output)
+        display(header, rules, text, ui, output)
         confirm_button.layout.visibility = 'hidden'
         redo_button.layout.visibility = 'hidden'    
 
@@ -264,6 +264,7 @@ class Tortus:
             
         skip_button.on_click(skip_button_clicked)
 
+
         def confirm_button_clicked(button):
             '''Response to click of the confirm button.
 
@@ -279,20 +280,12 @@ class Tortus:
             else:
 
                 clear_output(True)
-                progress_bar = widgets.IntProgress(
-                    value=self.num_records,
-                    min=0,
-                    max=self.num_records,
-                    step=1,
-                    description=f'{self.annotation_index + 1}/{self.num_records}',
-                    bar_style='',
-                    orientation='horizontal',
-                    layout=Layout(width='75%', align_content='center'))
-                progress_bar.style.bar_color = '#36a849'
-                display(HTML("<h3 style='text-align:center'>Annotations are complete.</h3>"))
-                display (progress_bar)
+                progress_bar.value = self.num_records
+                progress_bar.description = 'Complete'
+                display(header, output)    
 
         confirm_button.on_click(confirm_button_clicked)
+
 
         def redo_button_clicked(button):
             '''Response to click of the redo button.
@@ -316,8 +309,6 @@ class Tortus:
                 sentiment_buttons.layout.visibility = 'visible'
                 confirm_button.layout.visibility = 'hidden'
                 redo_button.layout.visibility = 'hidden'
-
-
 
         redo_button.on_click(redo_button_clicked)
 

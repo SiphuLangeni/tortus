@@ -12,7 +12,7 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, os.path.abspath('../src/'))
 
 
 # -- Project information -----------------------------------------------------
@@ -64,5 +64,5 @@ html_context = {
     "github_user": "SiphuLangeni", # Username
     "github_repo": "tortus", # Repo name
     "github_version": "master", # Version
-    "conf_py_path": "/docs/", # Path in the checkout to the docs root
+    "conf_py_path": "/docs/*", # Path in the checkout to the docs root
 }

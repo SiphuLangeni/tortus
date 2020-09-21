@@ -3,7 +3,7 @@ from datetime import datetime
 from ipywidgets import *
 from IPython.display import SVG, display, clear_output
 
-tortus_logo = SVG(data='../docs/_static/tortus_logo.svg')
+tortus_logo = SVG(data='./docs/_static/tortus_logo.svg')
 welcome = HTML("<h2 style='text-align:center'>easy text annotation in a Jupyter Notebook</h2>")
 display(tortus_logo, welcome)
 
@@ -117,7 +117,7 @@ class Tortus:
         '''Displays texts to be annotated in a UI. Loads user inputted labels and timestamps into
             ``annotations`` dataframe.
         '''
-        with open('../docs/_static/tortus_logo.png', 'rb') as image_file:
+        with open('./docs/_static/tortus_logo.png', 'rb') as image_file:
             image = image_file.read()
             logo = Image(value=image, format='png', width='40%')
 

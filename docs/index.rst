@@ -13,9 +13,22 @@ tortus documentation
 
 Welcome to the tortus documentation. **tortus** is a python package that makes it 
 easy to add labels to text data within a Jupyter Notebook. Ideal use is for datasets 
-that can be managed within a pandas dataframe. Positive, negative and neutral labels 
-can be applied to a selected number of records. Timestamped annotations can be saved 
-in a dataframe for future use in NLP projects.
+that can be managed within a pandas dataframe. Labels are applied to the selected number 
+of records. Timestamped annotations can be saved in a dataframe for future use in any 
+NLP/sentiment analysis project.  
+
+Target audience
+===============
+
+ * Data practitioners
+ * Researchers
+ * Students
+ * Data enthusiasts
+
+Anyone in need of a simple and intuitive product to label text data easily and efficiently 
+will benefit from **tortus**. 
+
+|
 
 .. toctree::
    :maxdepth: 2

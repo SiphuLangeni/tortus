@@ -60,7 +60,7 @@ annotations = tortus.annotations
 ```  
 
 ## Example
-<img src='https://raw.githubusercontent.com/SiphuLangeni/tortus/master/docs/_static/tortus_example.gif' width='500' alt='tortus example' />  
+<img src='https://raw.githubusercontent.com/SiphuLangeni/tortus/master/docs/_static/tortus_example.gif' width='700' alt='tortus example' />  
 <br>
 
 Click [here](https://github.com/SiphuLangeni/tortus/tree/master/sample_project) to see a sample project using tortus.  

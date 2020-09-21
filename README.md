@@ -1,13 +1,20 @@
 <p align='center'>
-    <img src='/docs/_static/tortus_logo.png' alt='tortus logo'>
+    <img src='https://raw.githubusercontent.com/SiphuLangeni/tortus/master/docs/_static/tortus_logo.svg?sanitize=true' alt='tortus logo' />
 </p>
 <br>
 
 ## A python package that makes it easy to add labels to text data within a Jupyter Notebook.
 
-Ideal use is for datasets that can be managed within a pandas dataframe. **``Positive``**, **``Negative``** 
-and **``Neutral``** labels can be applied to a selected number of records. Timestamped annotations 
-can be saved in a dataframe for future use in NLP projects.
+Ideal use is for datasets that can be managed within a pandas dataframe. Labels are applied to the selected number of records. Timestamped annotations can be saved in a dataframe for future use in any NLP/sentiment analysis project.
+
+## Target audience  
+ * Data practitioners
+ * Researchers
+ * Students
+ * Data enthusiasts
+
+Anyone in need of a simple and intuitive product to label text data easily and efficiently will benefit from **tortus**.  
+
 
 ## Installation
 
@@ -33,7 +40,7 @@ movie_reviews = pd.read_csv('movie_reviews.csv')
 
 Create an instance of Tortus class. You are required to enter the dataframe and the name 
 of the column of the text to be annotated. Optional parameters include ``num_records``, 
-``id_column``, ``annotations`` and ``random``.  
+``id_column``, ``annotations``, ``random`` and ``labels``.  
 
 ```python
 tortus = Tortus(movie_reviews, 'reviews', num_records=3, id_column='review_id')
@@ -52,7 +59,16 @@ annotations are required at a later time.
 annotations = tortus.annotations
 ```  
 
+## Example
+<img src='https://raw.githubusercontent.com/SiphuLangeni/tortus/master/docs/_static/tortus_example.gif' width='500' alt='tortus example' />  
+<br>
+
 Click [here](https://github.com/SiphuLangeni/tortus/tree/master/sample_project) to see a sample project using tortus.  
+
+
+## Documentation
+[https://tortus.readthedocs.io](https://tortus.readthedocs.io)  
+
 
 ## Developing tortus  
 

@@ -29,7 +29,11 @@ setup(
     long_description_content_type='text/markdown',
     python_requires='>=3.6',
     install_requires=[
-        'pandas', 'ipywidgets', 'ipython', 'notebook', 'jupyter_contrib_nbextensions'
+        'pandas>=1.0.1',
+        'ipywidgets==7.5.1',
+        'ipython>=7.12.0',
+        'jupyter-notebook==6.1.1',
+        'jupyter_contrib_nbextensions==0.5.1'
     ],
     extras_require={
         'dev': [

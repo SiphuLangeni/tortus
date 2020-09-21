@@ -43,8 +43,18 @@ annotations are required at a later time.
 
    annotations = tortus.annotations
 
+|
+
 Example
 *******
+
+|
+
+.. image:: _static/tortus_example.gif
+   :width: 700
+
+|
+
 Click `here`_ to see a sample project using tortus.
 
 .. _here: https://github.com/SiphuLangeni/tortus/tree/master/sample_project

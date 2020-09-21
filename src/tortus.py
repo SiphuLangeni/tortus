@@ -116,7 +116,7 @@ class Tortus:
         '''Displays texts to be annotated in a UI. Loads user inputted labels and timestamps into
             ``annotations`` dataframe.
         '''
-        with open('../docs/_build/html/_images/tortus_logo.png', 'rb') as image_file:
+        with open('../docs/_static/tortus_logo.png', 'rb') as image_file:
             image = image_file.read()
             logo = Image(value=image, format='png', width='40%')
 

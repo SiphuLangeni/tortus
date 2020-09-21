@@ -1,8 +1,11 @@
 import pandas as pd
 from datetime import datetime
-import ipywidgets as widgets
-from ipywidgets import HTML, Output
-from IPython.display import display, clear_output
+from ipywidgets import *
+from IPython.display import SVG, display, clear_output
+
+tortus_logo = SVG(data='../docs/_static/tortus_logo.svg')
+welcome = HTML("<h2 style='text-align:center'>easy text annotation in a Jupyter Notebook</h2>")
+display(tortus_logo, welcome)
 
 class Tortus:
     '''Text annotation within a Jupyter Notebook
@@ -29,16 +32,15 @@ class Tortus:
     :param random: (default=True) Determines if records are loaded randomly or sequentially.
     :type random: bool
 
-    :param labels: Annotation labels., default=['Positive', 'Negative', 'Neutral']
+    :param labels: Annotation labels, default=['Positive', 'Negative', 'Neutral']
     :type labels: list
     '''
-    
     annotation_index = 0
+
 
     def __init__(self, df, text, num_records=10, id_column=None, annotations=None, random=True,
                 labels=['Positve', 'Negative', 'Neutral']):
         '''Initializes the Tortus class.'''
-        
         self.df = df
         self.text = text
         self.num_records = num_records
@@ -53,7 +55,8 @@ class Tortus:
         self.random = random
         self.labels = labels
         self.subset_df = self.create_subset_df()
-           
+
+
     def create_subset_df(self):
         '''
         Subsets ``df`` to include only records cued for annotation.
@@ -63,7 +66,6 @@ class Tortus:
         :returns: A dataframe that will be used in the annotation tool.
         :rtype: pandas.core.frame.DataFrame
         '''
-
         if self.annotations.empty:
             subset_df = self.df.copy()
 
@@ -84,6 +86,7 @@ class Tortus:
 
         return subset_df
 
+
     def create_record_id(self):
         '''Provides a record id for ``annotations``.
 
@@ -91,56 +94,112 @@ class Tortus:
             :meth:`create_subset_df` method.
         :rtype: list
         '''
-
         if self.id_column is None:
             record_id = self.subset_df.index.to_list()
         else:
             record_id = self.subset_df[self.id_column].to_list()
         return record_id
-        
+
+    def make_html(self, text):
+        '''Changes text to html for annotation widget user interface.
+
+        :param text: Text for conversion to html.
+        :type text: str
+
+        :returns: HTML snippet
+        :rtype: str
+        '''
+        html = '<h4>' + text + '</h4>'
+        return html
+
     def annotate(self):
         '''Displays texts to be annotated in a UI. Loads user inputted labels and timestamps into
             ``annotations`` dataframe.
         '''
-        logo = widgets.HTML(
-            "<br><p align='center'><img width='250' align='center' alt='tortus logo' \
-                src='../docs/_static/tortus_logo.svg'></p><br>")
-        instructions = widgets.HTML(
-            '<b>Click on the appropriate sentiment for the text below. Each selection requires \
-                confirmation before proceeding to the next item. To retrieve your annotations \
-                at any time, call <i>your_instance.annotations</i></b>.')
-        text = HTML(self.subset_df.iloc[self.annotation_index, -1])
+        with open('../docs/_build/html/_images/tortus_logo.png', 'rb') as image_file:
+            image = image_file.read()
+            logo = Image(value=image, format='png', width='40%')
+
+        rules = HTML(
+            'Click on the label corresponding with the text below. Each selection requires \
+                confirmation before proceeding to the next item.')
+        annotation_text = self.subset_df.iloc[self.annotation_index, -1]
+        html = self.make_html(annotation_text)
+        text = widgets.HTML(html)
         
         labels = []
         for label in self.labels:
-            labels.append(widgets.Button(description=label))
-        label_buttons = widgets.HBox(labels)
-        skip_button = widgets.Button(description='Skip')
-        confirm_button = widgets.Button(description='Confirm selection')
-        redo_button = widgets.Button(description='Try again')
-        quit_button = widgets.Button(description='Quit')
-        progress_bar = widgets.IntProgress(
+            label_button = Button(
+                description=label,
+                layout=Layout(border='solid', flex='1 1 auto', width='auto'),
+                style=ButtonStyle(button_color='#eeeeee', font_weight='bold'))
+            labels.append(label_button)
+
+        label_buttons = HBox(labels)
+        
+        skip_button = Button(
+            description='Skip',
+            layout=Layout(border='solid', flex='1 1 auto', width='auto'),
+            style=ButtonStyle(button_color='#eeeeee', font_weight='bold'))
+       
+        confirm_button = Button(
+            description='Confirm selection',
+            layout=Layout(border='solid', flex='1 1 auto', width='auto', grid_area='confirm'),
+            style=ButtonStyle(button_color='#eeeeee', font_weight='bold'))
+        
+        redo_button = Button(
+            description='Try again',
+            layout=Layout(border='solid', flex='1 1 auto', width='auto', grid_area='redo'),
+            style=ButtonStyle(button_color='#eeeeee', font_weight='bold'))
+        
+        progress_bar = IntProgress(
                 value=self.annotation_index,
                 min=0,
                 max=self.num_records,
                 step=1,
                 description=f'{self.annotation_index + 1}/{self.num_records}',
                 bar_style='',
-                orientation='horizontal')
-        
-        logo_layout = widgets.Layout(
-                display='flex',
-                flex_flow='column',
-                align_items='center',
-                width='100%')
-        
-        logo_box = widgets.HBox(children=[logo],layout=logo_layout)
-        sentiment_buttons = widgets.HBox([label_buttons, skip_button, quit_button])
-        confirmation_buttons = widgets.HBox([confirm_button, redo_button])
-        output = widgets.Output()
+                orientation='horizontal',
+                layout=Layout(width='50%', align_self='flex-end'))
+        progress_bar.style.bar_color = '#36a849'
+    
+        header = HBox([logo, progress_bar])
+        sentiment_buttons = HBox([label_buttons, skip_button])
+        confirmation_buttons = HBox([confirm_button, redo_button])
+        sentiment = labels + [skip_button]
+        confirm = [confirm_button, redo_button]
 
-        display(logo_box, instructions, text, sentiment_buttons, confirmation_buttons, progress_bar, output)
-        confirmation_buttons.layout.visibility = 'hidden'    
+        box_layout = Layout(
+            display='flex',
+            flex_flow='row',
+            align_items='stretch',
+            width='100%'
+        )
+
+        box_sentiment = Box(sentiment, layout=box_layout)
+        box_confirm = Box(confirm, layout=box_layout)
+
+        all_buttons = VBox(
+            [box_sentiment, box_confirm],
+            layout=Layout(width='auto', grid_area='all_buttons')
+        )
+
+        ui = GridBox(
+            children=[all_buttons],
+            layout=Layout(
+                width='100%',
+                grid_template_rows='auto auto',
+                grid_template_columns='15% 70% 15%',
+                grid_template_areas='''
+                ". all_buttons ."
+                ''')
+        )
+        
+        output = Output()
+
+        display(header, rules, text, ui, output)
+        confirm_button.layout.visibility = 'hidden'
+        redo_button.layout.visibility = 'hidden'    
 
 
         def label_buttons_clicked(button):
@@ -149,6 +208,7 @@ class Tortus:
             Appends ``annotations`` with label selection.
             :param button: Label buttons click. 
             '''
+            button.style.button_color = '#36a849'
             record_id = self.create_record_id()
             self.annotations.loc[len(self.annotations)] = [
                 record_id[self.annotation_index],
@@ -156,15 +216,24 @@ class Tortus:
                 str(button.description).lower(),
                 datetime.now().replace(microsecond=0)  
             ]
+            
+            for label in labels:
+                label.disabled = True
+                if button != label:
+                    label.layout.border = 'None'
 
+            skip_button.disabled = True
+            skip_button.layout.border = 'None'
+                
             with output:
                 clear_output(True)
-                sentiment_buttons.layout.visibility = 'hidden'
-                print('The text has', str(button.description).lower(), 'sentiment.')
-                confirmation_buttons.layout.visibility = 'visible'
+                sentiment_buttons.layout.visibility = 'visible'
+                confirm_button.layout.visibility = 'visible'
+                redo_button.layout.visibility = 'visible'
 
         for label in labels:
             label.on_click(label_buttons_clicked)
+        
 
         def skip_button_clicked(button):
             '''Response to button click of the skip button.
@@ -173,6 +242,7 @@ class Tortus:
             
             :param button: Skip button click.
             '''
+            button.style.button_color = '#36a849'
             record_id = self.create_record_id()
             self.annotations.loc[len(self.annotations)] = [
                 record_id[self.annotation_index],
@@ -180,14 +250,20 @@ class Tortus:
                 None,
                 datetime.now().replace(microsecond=0)  
             ]
-            
+            for label in labels:
+                label.disabled = True
+                label.layout.border = 'None'
+
+            skip_button.disabled = True
+                
             with output:
                 clear_output(True)
-                sentiment_buttons.layout.visibility = 'hidden'
-                print('This action will add a Null value to the label for this record.')
-                confirmation_buttons.layout.visibility = 'visible'
-
+                sentiment_buttons.layout.visibility = 'visible'
+                confirm_button.layout.visibility = 'visible'
+                redo_button.layout.visibility = 'visible'
+            
         skip_button.on_click(skip_button_clicked)
+
 
         def confirm_button_clicked(button):
             '''Response to click of the confirm button.
@@ -204,18 +280,12 @@ class Tortus:
             else:
 
                 clear_output(True)
-                progress_bar = widgets.IntProgress(
-                    value=self.num_records,
-                    min=0,
-                    max=self.num_records,
-                    step=1,
-                    description=f'{self.annotation_index + 1}/{self.num_records}',
-                    bar_style='',
-                    orientation='horizontal')
-                display(HTML('<h3>Annotations are complete.</h3>'))
-                display (progress_bar)
+                progress_bar.value = self.num_records
+                progress_bar.description = 'Complete'
+                display(header, output)    
 
         confirm_button.on_click(confirm_button_clicked)
+
 
         def redo_button_clicked(button):
             '''Response to click of the redo button.
@@ -225,33 +295,20 @@ class Tortus:
             :param button: Redo button click.
             '''
             self.annotations.drop([self.annotation_index], inplace=True)
-        
+            for label in labels:
+                label.style.button_color = '#eeeeee'
+                label.disabled = False
+                label.layout.border = 'solid'
+                
+            skip_button.style.button_color = '#eeeeee'
+            skip_button.disabled = False
+            skip_button.layout.border = 'solid'
+
             with output:
                 clear_output(True)
                 sentiment_buttons.layout.visibility = 'visible'
-                print('Please try again.')
-                confirmation_buttons.layout.visibility = 'hidden'
-
+                confirm_button.layout.visibility = 'hidden'
+                redo_button.layout.visibility = 'hidden'
 
         redo_button.on_click(redo_button_clicked)
 
-        def quit_button_clicked(button):
-            '''Response to click of the quit button.
-
-            Stops the annotation tool and shows a progress bar to indicate how many texts were annotated.
-            
-            :param button: Quit button click.
-            '''
-            clear_output(True)
-            progress_bar = widgets.IntProgress(
-                value=self.annotation_index,
-                min=0,
-                max=self.num_records,
-                step=1,
-                description=f'{self.annotation_index}/{self.num_records}',
-                bar_style='',
-                orientation='horizontal')
-            display(HTML('<h3>Annotations stopped.</h3>'))
-            display (progress_bar)
-            
-        quit_button.on_click(quit_button_clicked)

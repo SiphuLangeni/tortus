@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 
 with open('README.md', 'r') as fh:
     long_description = fh.read()
@@ -11,8 +11,6 @@ setup(
     author='Siphu Langeni',
     author_email='szlangeni@gmail.com',
     py_modules=['tortus'],
-    packages=find_packages(include=['src']),
-    include_package_data=True,
     package_dir={'': 'src'},
     classifiers=[
         'Programming Language :: Python :: 3.6',
@@ -32,7 +30,6 @@ setup(
         'pandas>=1.0.1',
         'ipywidgets==7.5.1',
         'ipython>=7.12.0',
-        'jupyter-notebook==6.1.1',
         'jupyter_contrib_nbextensions==0.5.1'
     ],
     extras_require={

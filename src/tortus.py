@@ -10,30 +10,31 @@ display(tortus_logo, welcome)
 class Tortus:
     '''Text annotation within a Jupyter Notebook
     
-    :attr annotation_index: A counter for the annotations in progress.
+    :attr annotation_index: A counter for the annotations in progress
 
-    :param df: A dataframe with texts that need to be annotated.
+    :param df: A dataframe with texts that need to be annotated
     :type df: pandas.core.frame.DataFrame
 
-    :param text: The name of the column containing the text to be annotated.
+    :param text: The name of the column containing the text to be annotated
     :type text: str
 
-    :param num_records: (default=10) Number of records to annotate.
-    :type num_records: int
+    :param num_records: Number of records to annotate, defaults to 10
+    :type num_records: int, optional
     
-    :param id_column: (default=None) The name of the column containing ID of the text.
-        If None, ``id_column`` will correspond to the index of ``df``.
-    :type id_column: str
+    :param id_column: The name of the column containing ID of the text - if None, ``id_column`` 
+        is the index of ``df``, default is None
+    :type id_column: str, optional
 
-    :param annotations: (default=None) The dataframe with annotations previously created in this tool.
-        If None, ``annotations`` is created with columns ``id_column``, ``text``, ``label``, ``annotated_at``.
-    :type annotation_df: pandas.core.frame.DataFrame
+    :param annotations: The dataframe with annotations previously created in this tool.
+        If None, ``annotations`` is created with columns ``id_column``, ``text``, ``label``, 
+        ``annotated_at``, default is None
+    :type annotation_df: pandas.core.frame.DataFrame, optional
 
-    :param random: (default=True) Determines if records are loaded randomly or sequentially.
-    :type random: bool
+    :param random: Determines if records are loaded randomly or sequentially, default is True
+    :type random: bool, optional
 
-    :param labels: Annotation labels, default=['Positive', 'Negative', 'Neutral']
-    :type labels: list
+    :param labels: Annotation labels, default is ['Positive', 'Negative', 'Neutral']
+    :type labels: list, optional
     '''
     annotation_index = 0
 

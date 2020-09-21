@@ -5,7 +5,7 @@ with open('README.md', 'r') as fh:
 
 setup(
     name='tortus',
-    version='0.0.2',
+    version='1.0.0',
     description='Easy text annotation in a Jupyter Notebook',
     url='https://github.com/SiphuLangeni/tortus',
     author='Siphu Langeni',

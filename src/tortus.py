@@ -124,7 +124,7 @@ class Tortus:
             'Click on the label corresponding with the text below. Each selection requires \
                 confirmation before proceeding to the next item.')
         annotation_text = self.subset_df.iloc[self.annotation_index, -1]
-        html = self.make_html(self.subset_df.iloc[self.annotation_index, -1])
+        html = self.make_html(annotation_text)
         text = widgets.HTML(html)
         
         labels = []

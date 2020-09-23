@@ -3,18 +3,26 @@ from datetime import datetime
 import sysconfig
 from ipywidgets import Image, HTML, Button, IntProgress, \
     Box, HBox, VBox, GridBox, Layout, ButtonStyle, Output
-from IPython.display import SVG, HTML, display, clear_output
+from IPython.display import display, clear_output
 
 
 package_dir = sysconfig.get_paths()['purelib']
 logo_path = package_dir + '/tortus/tortus_logo.png'
 
-with open(logo_path, 'rb') as image_file:
-    image = image_file.read()
+try:
+    with open(logo_path, 'rb') as image_file:
+        image = image_file.read()
 
-logo = Image(value=image, format='png', width='100%')
+    logo = Image(value=image, format='png', width='100%')
+    welcome = HTML("<h2 style='text-align:center'>\
+        easy text annotation in a Jupyter Notebook</h2>")
 
-welcome = HTML("<h2 style='text-align:center'>easy text annotation in a Jupyter Notebook</h2>")
+except:
+    logo = HTML("<h1 style='text-align:center'>t &nbsp; <span style=\
+        'color:#36a849'>o</span> &nbsp; r &nbsp; t &nbsp; u &nbsp; s</h2>")
+    welcome = HTML("<h3 style='text-align:center'>\
+        easy text annotation in a Jupyter Notebook</h3>")
+
 display(logo, welcome)
 
 class Tortus:
@@ -127,9 +135,14 @@ class Tortus:
         '''Displays texts to be annotated in a UI. Loads user inputted labels and timestamps into
             ``annotations`` dataframe.
         '''
-        with open(logo_path, 'rb') as image_file:
-            image = image_file.read()
-            logo = Image(value=image, format='png', width='40%')
+        try:
+            with open(logo_path, 'rb') as image_file:
+                image = image_file.read()
+                logo = Image(value=image, format='png', width='40%')
+
+        except:
+            logo = HTML('<h1>t &nbsp; <span style="color:#36a849">o</span> \
+            &nbsp; r &nbsp; t &nbsp; u &nbsp; s</h1>')
 
         rules = HTML(
             'Click on the label corresponding with the text below. Each selection requires \
@@ -176,7 +189,7 @@ class Tortus:
     
         header = HBox([logo, progress_bar])
         sentiment_buttons = HBox([label_buttons, skip_button])
-        confirmation_buttons = HBox([confirm_button, redo_button])
+        # confirmation_buttons = HBox([confirm_button, redo_button])
         sentiment = labels + [skip_button]
         confirm = [confirm_button, redo_button]
 

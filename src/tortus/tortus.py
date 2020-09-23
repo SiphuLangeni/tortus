@@ -1,8 +1,21 @@
 import pandas as pd
 from datetime import datetime
+import sysconfig
 from ipywidgets import Image, HTML, Button, IntProgress, \
     Box, HBox, VBox, GridBox, Layout, ButtonStyle, Output
-from IPython.display import display, clear_output
+from IPython.display import SVG, HTML, display, clear_output
+
+
+package_dir = sysconfig.get_paths()['purelib']
+logo_path = package_dir + '/tortus/tortus_logo.png'
+
+with open(logo_path, 'rb') as image_file:
+    image = image_file.read()
+
+logo = Image(value=image, format='png', width='100%')
+
+welcome = HTML("<h2 style='text-align:center'>easy text annotation in a Jupyter Notebook</h2>")
+display(logo, welcome)
 
 class Tortus:
     '''Text annotation within a Jupyter Notebook
@@ -114,7 +127,7 @@ class Tortus:
         '''Displays texts to be annotated in a UI. Loads user inputted labels and timestamps into
             ``annotations`` dataframe.
         '''
-        with open('tortus/Images/tortus_logo.png', 'rb') as image_file:
+        with open(logo_path, 'rb') as image_file:
             image = image_file.read()
             logo = Image(value=image, format='png', width='40%')
 

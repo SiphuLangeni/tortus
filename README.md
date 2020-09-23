@@ -1,5 +1,5 @@
 <p align='center'>
-    <img src='https://raw.githubusercontent.com/SiphuLangeni/tortus/master/docs/_static/tortus_logo.svg?sanitize=true' alt='tortus logo' />
+    <img src='https://raw.githubusercontent.com/SiphuLangeni/tortus/master/src/tortus/Images/tortus_logo.svg?sanitize=true' alt='tortus logo' />
 </p>
 <br>
 
@@ -60,20 +60,9 @@ annotations = tortus.annotations
 ```  
 
 ## Example
-<img src='https://raw.githubusercontent.com/SiphuLangeni/tortus/master/docs/_static/tortus_example.gif' width='700' alt='tortus example' />  
+<img src='https://media.giphy.com/media/eFZVzxe5I2OyeaOFei/giphy.gif' width='400' alt='tortus example' /> 
+
 <br>
 
-Click [here](https://github.com/SiphuLangeni/tortus/tree/master/sample_project) to see a sample project using tortus.  
+Click [here](https://github.com/SiphuLangeni/tortus/tree/master/sample_project) to see a sample project using tortus.
 
-
-## Documentation
-[https://tortus.readthedocs.io](https://tortus.readthedocs.io)  
-
-
-## Developing tortus  
-
-To install tortus, along with the tools you need to develop and run tests, run the following in your virtualenv:  
-
-```bash
-$ pip install -e .[dev]
-``` 

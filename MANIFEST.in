@@ -1,9 +1,5 @@
 include *.in
 include *.txt
-recursive-include docs *.bat
-recursive-include docs *.py
-recursive-include docs *.rst
-recursive-include docs *.svg
-recursive-include docs *.png
-recursive-include docs *.gif
-recursive-include docs Makefile
+recursive-include tortus *.png
+
+recursive-exclude docs *

@@ -1,5 +1,6 @@
 include *.in
 include *.txt
-recursive-include tortus *.png
+recursive-include src *.png
 
 recursive-exclude docs *
+

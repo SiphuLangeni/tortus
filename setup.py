@@ -1,11 +1,22 @@
-from setuptools import setup, find_packages
+from setuptools import setup, find_packages, Command
+import os
+
+class CleanCommand(Command):
+    user_options = []
+    def initialize_options(self):
+        self.cwd = None
+    def finalize_options(self):
+        self.cwd = os.getcwd()
+    def run(self):
+        assert os.getcwd() == self.cwd, 'Must be in package root: %s' % self.cwd
+        os.system ('rm -rf ./build ./dist ./*.pyc ./*.tgz ./*.egg-info')
 
 with open('README.md', 'r') as fh:
     long_description = fh.read()
 
 setup(
     name='tortus',
-    version='1.0.1',
+    version='1.0.2',
     description='Easy text annotation in a Jupyter Notebook',
     url='https://github.com/SiphuLangeni/tortus/',
     project_urls={
@@ -16,15 +27,10 @@ setup(
     author_email='szlangeni@gmail.com',
     package_dir={'': 'src'},
     packages=find_packages('src'),
-    # py_modules=['tortus.tortus'],
     include_package_data=True,
-    # py_modules=['tortus.tortus'],
-
     package_data={
-        # If any package contains *.txt or *.rst files, include them:
-        'tortus': ['*.png'],
+        'tortus': ['Images/tortus_logo.png'],
     },
-    
     classifiers=[
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
@@ -50,6 +56,7 @@ setup(
             'pytest>=3.7', 'check-manifest==0.10.1', 'twine==3.2.0'
         ]
     },
-
-
+    cmdclass={
+        'clean': CleanCommand
+    }
 )

@@ -1,5 +1,4 @@
-import os
-from IPython.display import SVG, HTML
+__version__='1.0.2'
 
 from .tortus import Tortus
 

@@ -7,7 +7,7 @@ from IPython.display import display, clear_output
 
 
 package_dir = sysconfig.get_paths()['purelib']
-logo_path = package_dir + '/tortus/tortus_logo.png'
+logo_path = package_dir + '/tortus/Images/tortus_logo.png'
 
 try:
     with open(logo_path, 'rb') as image_file:
@@ -189,7 +189,6 @@ class Tortus:
     
         header = HBox([logo, progress_bar])
         sentiment_buttons = HBox([label_buttons, skip_button])
-        # confirmation_buttons = HBox([confirm_button, redo_button])
         sentiment = labels + [skip_button]
         confirm = [confirm_button, redo_button]
 
@@ -318,7 +317,7 @@ class Tortus:
             
             :param button: Redo button click.
             '''
-            self.annotations.drop([self.annotation_index], inplace=True)
+            self.annotations = self.annotations.head(-1)
             for label in labels:
                 label.style.button_color = '#eeeeee'
                 label.disabled = False

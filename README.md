@@ -60,7 +60,7 @@ annotations = tortus.annotations
 ```  
 
 ## Example
-<img src='https://media.giphy.com/media/eFZVzxe5I2OyeaOFei/giphy.gif' width='400' alt='tortus example' /> 
+<img src='https://media.giphy.com/media/eFZVzxe5I2OyeaOFei/giphy.gif' width='600' alt='tortus example' /> 
 
 <br>
 

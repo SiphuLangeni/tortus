@@ -28,7 +28,7 @@ jupyter nbextension enable --py widgetsnbextension
 Import the necessary modules into a Jupyter Notebook.  
 
 ```python
-import pd as pandas
+import pandas as pd
 from tortus import Tortus
 ```  
 
